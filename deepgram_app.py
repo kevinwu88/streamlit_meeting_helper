@@ -64,24 +64,27 @@ def analyze_metadata(metadata, metadata_type):
         st.error(f"Failed to analyze metadata: {str(e)}")
         return None
 
-st.title("Salesforce Security Scanner ")
+st.title("Security Scanner (beta)")
+st.caption("This beta auto scan function uses generative AI to scan Salesforce metadata, identifying issues like code inefficiencies and security vulnerabilities. It provides tailored recommendations for remediation, enhancing performance and reliability. Users can interactively select metadata components and receive real-time insights for improved system optimization and security.")
+
 
 sf = connect_to_salesforce()
 if sf:
-    st.success("Connected to Salesforce successfully!")
+    st.success("Connected to metadata successfully!")
 
     metadata_types = ["SecuritySettings", "Profile", "PermissionSet", "Role"]
     selected_type = st.selectbox("Select metadata type", metadata_types)
 
     if st.button("Start Scan"):
-        metadata = fetch_metadata(sf, selected_type)
-        if metadata:
-            st.subheader(f"{selected_type} Metadata")
-            st.json(metadata)
+        with st.spinner("Analysing selected metadata ..."):
+            metadata = fetch_metadata(sf, selected_type)
+            if metadata:
+                st.subheader(f"{selected_type} Metadata")
+                st.json(metadata, expanded= False)
 
-            analysis = analyze_metadata(metadata, selected_type)
-            st.subheader("OpenAI Analysis")
-            st.write(analysis.content)
+                analysis = analyze_metadata(metadata, selected_type)
+                st.subheader("OpenAI Analysis")
+                st.write(analysis.content)
 else:
     st.error("Failed to connect to Salesforce. Please check your credentials.")
 
