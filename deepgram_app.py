@@ -83,7 +83,7 @@ if sf:
                 st.json(metadata, expanded= False)
 
                 analysis = analyze_metadata(metadata, selected_type)
-                st.subheader("OpenAI Analysis")
+                st.subheader("AI Security Setting Analysis")
                 st.write(analysis.content)
 else:
     st.error("Failed to connect to Salesforce. Please check your credentials.")
